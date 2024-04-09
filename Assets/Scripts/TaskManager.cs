@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [RequireComponent(typeof(Scaner))]
@@ -10,15 +11,18 @@ public class TaskManager : MonoBehaviour
     private Scaner _scaner;
     private List<Task> _tasks = new List<Task>();
     private List<Worker> _workers = new List<Worker>();
+    private UnitBuilder _unitBuilder;
 
     private void Awake()
     {
         _scaner = GetComponent<Scaner>();
+        _unitBuilder = GetComponent<UnitBuilder>();
     }
 
     private void OnEnable()
     {
         _scaner.ResourceDetected += HandleTask;
+        _unitBuilder.UnitBuilt += TryAddWorker;
 
         Worker[] workers = GetComponentsInChildren<Worker>();
 
@@ -36,7 +40,8 @@ public class TaskManager : MonoBehaviour
     private void OnDisable()
     {
         _scaner.ResourceDetected -= HandleTask;
-        
+        _unitBuilder.UnitBuilt -= TryAddWorker;
+
         if (_workers.Count > 0 ) 
         {
             foreach (Worker worker in _workers) 
@@ -70,7 +75,7 @@ public class TaskManager : MonoBehaviour
         if (_tasks.Count > 0)
         {
             foreach (Task task in _tasks)
-            {        
+            {          
                 if (task.Transform == transform)
                 {
                     return;
@@ -102,9 +107,25 @@ public class TaskManager : MonoBehaviour
         _tasks.Remove(task);
         TaskCompleted?.Invoke(task);
     }
+
+    private void TryAddWorker(Transform transform)
+    {
+        if (transform.gameObject.TryGetComponent(out Worker worker))
+        {
+            AddWorker(worker);
+        }
+    }
+
     private void AddTask(Transform transform)
     {
         Task task = new Task(transform);
         _tasks.Add(task);
+    }
+
+    private void AddWorker(Worker worker)
+    {
+        _workers.Add(worker);
+        worker.ReadyToWork += TryGiveTask;
+        worker.TaskCompleted += CompleteTask;
     }
 }

@@ -6,12 +6,7 @@ public class Mover : MonoBehaviour
 
     private Vector3 _targetPosition;
 
-    private void Start()
-    {
-        _targetPosition = transform.position;   
-    }
-
-    void Update()
+    private void Update()
     {
         if (_targetPosition != transform.position)
         {

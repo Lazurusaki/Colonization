@@ -17,9 +17,9 @@ public class ResourcesViewer : MonoBehaviour
         _resourceCounter.ResourcesChanged -= OnScoreChanged;
     }
 
-    private void OnScoreChanged(int minerals,int gas)
+    private void OnScoreChanged()
     {
-        _minerals.text = minerals.ToString();
-        _gas.text = gas.ToString();
+        _minerals.text = _resourceCounter.Minerals.ToString();
+        _gas.text = _resourceCounter.Gas.ToString();
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Mover))]
 [RequireComponent(typeof(Carrier))]
+
 public class Worker : MonoBehaviour
 {
     public event Action<Worker> ReadyToWork;

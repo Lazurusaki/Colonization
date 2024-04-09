@@ -4,11 +4,14 @@ using UnityEngine;
 [RequireComponent (typeof(TaskManager))]
 public class ResourceCounter : MonoBehaviour
 {
-    public event Action<int, int> ResourcesChanged;
+    public event Action ResourcesChanged;
 
     private int _minerals;
     private int _gas;
     private TaskManager _taskManager;
+
+    public int Minerals => _minerals;
+    public int Gas=> _gas;
 
     private void Awake()
     {
@@ -25,7 +28,6 @@ public class ResourceCounter : MonoBehaviour
         _taskManager.TaskCompleted -= Add;
     }
 
-    // Update is called once per frame
     public void Add(Task task)
     {
         switch (task.ResourceType)
@@ -42,6 +44,19 @@ public class ResourceCounter : MonoBehaviour
             }
         }
 
-        ResourcesChanged?.Invoke(_minerals,_gas);
+        ResourcesChanged?.Invoke();
+    }
+
+    public bool TrySpend(int minerals,int gas)
+    {
+        if (_minerals >= minerals && _gas >= gas)
+        {
+            _minerals -= minerals;
+            _gas -= gas;
+            ResourcesChanged?.Invoke();
+            return true;
+        }
+
+        return false;   
     }
 }
