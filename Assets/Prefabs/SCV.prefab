@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c551816a5fac4747a3cb2cf0cdb59b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupSocketPosition: {fileID: 6920629274788180363}
+  pickupSocket: {fileID: 6920629274788180363}
 --- !u!54 &270871912971032336
 Rigidbody:
   m_ObjectHideFlags: 0
