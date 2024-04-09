@@ -75,10 +75,10 @@ public class TaskManager : MonoBehaviour
                 {
                     return;
                 }
-            }
+            }     
         }
 
-        AddTask(transform); 
+        AddTask(transform);
     }
  
     private void TryGiveTask(Worker worker)

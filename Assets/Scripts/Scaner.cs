@@ -19,6 +19,7 @@ public class Scaner : MonoBehaviour
     private IEnumerator Scan()
     {
         WaitForSeconds wait = new WaitForSeconds(_frequency);
+
         while(true)
         {
             yield return wait;

@@ -8,7 +8,7 @@ public class Carrier : MonoBehaviour
     public event Action Delivered;
     public event Action Loaded;
 
-    [SerializeField] private Transform pickupSocket;
+    [SerializeField] private Transform _pickupSocket;
 
     private Worker _worker;
     private bool _isLoaded;
@@ -22,13 +22,13 @@ public class Carrier : MonoBehaviour
     {
         if (!_isLoaded)
         {
-            if (pickupSocket)
+            if (_pickupSocket)
             {
                 if (other.TryGetComponent<IPickupable>(out _) && 
                     other.transform.parent.TryGetComponent<ResourceSpawner>(out _) &&
                     other.transform.position == _worker.Task.Transform.position)
                 {
-                    other.transform.position = pickupSocket.position;
+                    other.transform.position = _pickupSocket.position;
                     other.transform.SetParent(transform);
                     _isLoaded = true;
                     Loaded?.Invoke();
