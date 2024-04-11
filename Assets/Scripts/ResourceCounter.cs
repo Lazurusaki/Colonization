@@ -1,4 +1,5 @@
 using System;
+using UnityEditorInternal;
 using UnityEngine;
 
 [RequireComponent (typeof(TaskManager))]
@@ -20,15 +21,27 @@ public class ResourceCounter : MonoBehaviour
 
     private void OnEnable()
     {
-        _taskManager.TaskCompleted += Add;
+        _taskManager.TaskCompleted += HandleTask;
     }
 
     private void OnDisable()
     {
-        _taskManager.TaskCompleted -= Add;
+        _taskManager.TaskCompleted -= HandleTask;
     }
 
-    public void Add(Task task)
+    private void HandleTask(Task task)
+    {   
+        if (task is ExtractTask)
+        {
+            Add(task as ExtractTask);
+        }
+        else
+        {
+            
+        }
+    }
+
+    public void Add(ExtractTask task)
     {
         switch (task.ResourceType)
         {
@@ -39,8 +52,8 @@ public class ResourceCounter : MonoBehaviour
             }
             case ResourceType.Gas:
             {
-                 _gas++;
-                 break;
+                _gas++;
+                break;
             }
         }
 

@@ -20,6 +20,11 @@ public class SceneCleaner : MonoBehaviour
         }
     }
 
+    private void Clean(Transform transform)
+    {
+        Destroy(transform.gameObject);
+    }
+
     private void Clean(Task task)
     {
         Destroy(task.Transform.gameObject);

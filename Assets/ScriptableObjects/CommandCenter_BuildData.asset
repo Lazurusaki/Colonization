@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e51851f06b80b7408d812558f029007, type: 3}
-  m_Name: UnitBuildCatalog
+  m_Script: {fileID: 11500000, guid: 39be573fe3048494aaf9826211787bca, type: 3}
+  m_Name: CommandCenter_BuildData
   m_EditorClassIdentifier: 
-  Units:
-  - {fileID: 11400000, guid: ac67b4ed49d4c4f4d9277f1af1c7f8b1, type: 2}
-  - {fileID: 11400000, guid: c6f83d7cbd336db489b287c6ba0d7e18, type: 2}
+  Prefab: {fileID: -5158233250705190546, guid: 48f80e44c7fd8974999537c19de8fb44, type: 3}
+  Cost:
+    Minerals: 2
+    Gas: 3

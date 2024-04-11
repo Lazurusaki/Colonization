@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
-[RequireComponent(typeof(Scaner))]
+[RequireComponent(typeof(Scaner),typeof(CommandCenter))]
 public class TaskManager : MonoBehaviour
 {
     public event Action<Task> TaskCompleted;
 
     private Scaner _scaner;
     private List<Task> _tasks = new List<Task>();
-    private List<Worker> _workers = new List<Worker>();
+    [SerializeField] private List<Worker> _workers = new List<Worker>();
     private UnitBuilder _unitBuilder;
+    private bool _isBuildPrioritet = false;
 
     private void Awake()
     {
@@ -54,6 +54,27 @@ public class TaskManager : MonoBehaviour
 
     private void HandleTask(Transform transform)
     {
+        if (_tasks.Count > 0)
+        {
+            foreach (Task task in _tasks)
+            {
+                if (task is BuildUnitTask && task.InProgress == false)
+                {
+                    if (_workers.Count > 0)
+                    {
+                        Worker worker = _workers.Find(worker => worker.IsBusy == false);
+
+                        if (worker)
+                        {
+                            task.ChangeStatus(true);
+                            worker.TakeTask(task);
+                        }
+                    }
+                    return;
+                }
+            }
+        }
+
         TryAddTask(transform);
 
         if (_tasks.Count > 0)
@@ -71,44 +92,46 @@ public class TaskManager : MonoBehaviour
     }
 
     private void TryAddTask(Transform transform)
-    {
-        if (_tasks.Count > 0)
-        {
-            foreach (Task task in _tasks)
-            {          
-                if (task.Transform == transform)
-                {
-                    return;
-                }
-            }     
-        }
-
+    {      
+        foreach (Task task in _tasks)
+        {          
+            if (task.Transform == transform)
+            {
+                return;
+            }
+        }     
+   
         AddTask(transform);
     }
  
     private void TryGiveTask(Worker worker)
     {
-        if (_tasks.Count > 0)
+        
+        foreach(Task task in _tasks)        
         {
-            foreach(Task task in _tasks)        
+            if (task.InProgress == false)
             {
-                if (task.InProgress == false)
-                {
-                    task.ChangeStatus(true);
-                    worker.TakeTask(task);
-                    break;
-                }
-            }   
-        }
+                task.ChangeStatus(true);
+                worker.TakeTask(task);
+                break;
+            }
+        }   
+        
     }
 
-    private void CompleteTask(Task task)
+    private void CompleteTask(Task task, Worker worker)
     {
+        if (task is BuildUnitTask)
+        {
+            _workers.Remove(worker);
+
+        }
+
         _tasks.Remove(task);
         TaskCompleted?.Invoke(task);
     }
 
-    private void TryAddWorker(Transform transform)
+    public void TryAddWorker(Transform transform)
     {
         if (transform.gameObject.TryGetComponent(out Worker worker))
         {
@@ -118,7 +141,7 @@ public class TaskManager : MonoBehaviour
 
     private void AddTask(Transform transform)
     {
-        Task task = new Task(transform);
+        Task task = new ExtractTask(transform);
         _tasks.Add(task);
     }
 
@@ -127,5 +150,16 @@ public class TaskManager : MonoBehaviour
         _workers.Add(worker);
         worker.ReadyToWork += TryGiveTask;
         worker.TaskCompleted += CompleteTask;
+    }
+
+    public void SetBuildPrioritet(bool set)
+    {
+        _isBuildPrioritet = set;
+    }
+
+    public void BuildBase(Transform transform,int unitIndex)
+    {
+        BuildUnitTask task = new BuildUnitTask(transform, _unitBuilder.Catalog.Units[unitIndex].Prefab);
+        _tasks.Add(task);
     }
 }

@@ -37,7 +37,7 @@ public class Carrier : MonoBehaviour
         }  
         else
         {
-            if (other.TryGetComponent<Base>(out _))
+            if (other.TryGetComponent<CommandCenter>(out _) && (other.transform == transform.parent))
             {
                 Delivered?.Invoke();
                 _isLoaded = false;

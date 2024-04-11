@@ -1,13 +1,11 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Mover))]
-[RequireComponent(typeof(Carrier))]
-
+[RequireComponent(typeof(Mover), typeof(Carrier))]
 public class Worker : MonoBehaviour
 {
     public event Action<Worker> ReadyToWork;
-    public event Action<Task> TaskCompleted;
+    public event Action<Task,Worker> TaskCompleted;
 
     private Task _task;
     private Carrier _carrier;
@@ -27,12 +25,14 @@ public class Worker : MonoBehaviour
     {
         _carrier.Loaded += ReturnToBase;
         _carrier.Delivered += FinishWork;
+        _mover.TargetReached += CheckTask;
     }
 
     private void OnDisable()
     {
         _carrier.Loaded -= ReturnToBase;
         _carrier.Delivered -= FinishWork;
+        _mover.TargetReached -= CheckTask;
     }
 
     private void Start()
@@ -54,7 +54,27 @@ public class Worker : MonoBehaviour
 
     public void FinishWork()
     { 
-        TaskCompleted?.Invoke(_task);
+        TaskCompleted?.Invoke(_task,this);
+        _isBusy = false;
+        ReadyToWork?.Invoke(this);
+    }
+
+    public void CheckTask()
+    {
+        if (_task is BuildUnitTask)
+        {
+            Unit newUnit = Instantiate((_task as BuildUnitTask).Unit,_task.Transform.position, Quaternion.identity); //BuildUnit     
+            TaskCompleted?.Invoke(_task,this);
+            transform.SetParent(newUnit.transform);
+
+            if (newUnit.TryGetComponent(out TaskManager taskManager))
+            {
+                taskManager.TryAddWorker(transform);
+            }
+                 
+        }
+
+        _task = null;
         _isBusy = false;
         ReadyToWork?.Invoke(this);
     }

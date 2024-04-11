@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6610177675219800548}
   - component: {fileID: 6508417895309180794}
   - component: {fileID: 270871912971032336}
-  - component: {fileID: 6902631749136623534}
+  - component: {fileID: 7355851395026978912}
   m_Layer: 0
   m_Name: SCV
   m_TagString: Untagged
@@ -124,7 +124,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
---- !u!114 &6902631749136623534
+--- !u!114 &7355851395026978912
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

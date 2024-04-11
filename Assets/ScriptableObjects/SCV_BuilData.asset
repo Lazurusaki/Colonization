@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39be573fe3048494aaf9826211787bca, type: 3}
   m_Name: SCV_BuilData
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 6902631749136623534, guid: 9af0a44c54c111642b7506e57af02396, type: 3}
+  Prefab: {fileID: 7355851395026978912, guid: 9af0a44c54c111642b7506e57af02396, type: 3}
   Cost:
     Minerals: 2
     Gas: 1

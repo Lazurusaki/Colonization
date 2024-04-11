@@ -11,6 +11,8 @@ public class UnitBuilder : MonoBehaviour
 
     private ResourceCounter _resourceCounter;
 
+    public UnitBuildCatalog Catalog => _catalog;
+   
     private void Awake()
     {
         _resourceCounter = GetComponent<ResourceCounter>();
@@ -30,4 +32,30 @@ public class UnitBuilder : MonoBehaviour
             }
         }
     }
+
+    public void BuildUnit(int index, Transform transform)
+    {
+        if (_catalog)
+        {
+            Transform unitTransform = Instantiate(_catalog.Units[index].Prefab, transform).transform;
+            UnitBuilt?.Invoke(unitTransform);
+        }
+    }
+
+    public bool CheckEnoughResources(int index)
+    {
+        int mineralsCost = _catalog.Units[index].Cost.Minerals;
+        int gasCost = _catalog.Units[index].Cost.Gas;
+
+        if (_resourceCounter.TrySpend(mineralsCost, gasCost))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
 }
