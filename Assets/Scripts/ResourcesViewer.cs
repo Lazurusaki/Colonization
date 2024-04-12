@@ -6,6 +6,9 @@ public class ResourcesViewer : MonoBehaviour
     [SerializeField] private ResourceCounter _resourceCounter;
     [SerializeField] private TMP_Text _minerals;
     [SerializeField] private TMP_Text _gas;
+    [SerializeField] Vector3 Rotation;
+
+    private Canvas _canvas;
 
     private void OnEnable()
     {
@@ -17,9 +20,19 @@ public class ResourcesViewer : MonoBehaviour
         _resourceCounter.ResourcesChanged -= OnScoreChanged;
     }
 
+    private void Awake()
+    {
+        _canvas = GetComponent<Canvas>();
+    }
+
     private void OnScoreChanged()
     {
         _minerals.text = _resourceCounter.Minerals.ToString();
         _gas.text = _resourceCounter.Gas.ToString();
+    }
+
+    private void Start()
+    {
+        transform.rotation = Quaternion.Euler(Rotation);
     }
 }

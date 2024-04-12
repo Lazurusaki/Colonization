@@ -1,5 +1,5 @@
 using UnityEngine;
 
-public class Ground : MonoBehaviour, IFlagPlacable
+public class Ground : MonoBehaviour
 {
 }

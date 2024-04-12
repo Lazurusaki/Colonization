@@ -1,5 +1,5 @@
 using UnityEngine;
 
-public class Flag : MonoBehaviour, ISpawnBlocker
+public class Flag : MonoBehaviour
 {
 }

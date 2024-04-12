@@ -6,7 +6,7 @@ public enum ResourceType
     Gas
 }
 
-public class Resource : MonoBehaviour, IPickupable
+public class Resource : MonoBehaviour
 {
     [SerializeField] private ResourceType _type;
 

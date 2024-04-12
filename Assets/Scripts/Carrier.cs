@@ -1,47 +1,34 @@
 using System;
+using UnityEditor;
 using UnityEngine;
-
-[RequireComponent(typeof(Worker))]
 
 public class Carrier : MonoBehaviour
 {
-    public event Action Delivered;
     public event Action Loaded;
 
     [SerializeField] private Transform _pickupSocket;
 
-    private Worker _worker;
-    private bool _isLoaded;
+    private Transform _cargo;
+    public Transform Cargo => _cargo;
 
-    private void Awake()
+
+    public void Take(Transform item)
     {
-        _worker = GetComponent<Worker>();
+        if (!_cargo && _pickupSocket)
+        {
+            item.position = _pickupSocket.position;
+            item.SetParent(transform);
+            _cargo = item;
+            Loaded?.Invoke();
+        }       
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Release()
     {
-        if (!_isLoaded)
-        {
-            if (_pickupSocket)
-            {
-                if (other.TryGetComponent<IPickupable>(out _) && 
-                    other.transform.parent.TryGetComponent<ResourceSpawner>(out _) &&
-                    other.transform.position == _worker.Task.Transform.position)
-                {
-                    other.transform.position = _pickupSocket.position;
-                    other.transform.SetParent(transform);
-                    _isLoaded = true;
-                    Loaded?.Invoke();
-                }
-            }
-        }  
-        else
-        {
-            if (other.TryGetComponent<CommandCenter>(out _) && (other.transform == transform.parent))
-            {
-                Delivered?.Invoke();
-                _isLoaded = false;
-            }
+        if (_cargo)
+        { 
+            _cargo.transform.parent = null;
+            _cargo = null;
         }
     }
 }
