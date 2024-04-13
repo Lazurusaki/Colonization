@@ -7,6 +7,7 @@ public class Mover : MonoBehaviour
 
     [SerializeField] private float _speed = 1.0f;
     [SerializeField] private float _targetDelta = 0.1f;
+
     private Vector3 _targetPosition;
 
     private void Update()

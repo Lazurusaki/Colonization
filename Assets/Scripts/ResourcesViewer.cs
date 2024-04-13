@@ -6,7 +6,7 @@ public class ResourcesViewer : MonoBehaviour
     [SerializeField] private ResourceCounter _resourceCounter;
     [SerializeField] private TMP_Text _minerals;
     [SerializeField] private TMP_Text _gas;
-    [SerializeField] Vector3 Rotation;
+    [SerializeField] private Vector3 _rotation;
 
     private Canvas _canvas;
 
@@ -33,6 +33,6 @@ public class ResourcesViewer : MonoBehaviour
 
     private void Start()
     {
-        transform.rotation = Quaternion.Euler(Rotation);
+        transform.rotation = Quaternion.Euler(_rotation);
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 
 public class Carrier : MonoBehaviour
@@ -9,8 +8,8 @@ public class Carrier : MonoBehaviour
     [SerializeField] private Transform _pickupSocket;
 
     private Transform _cargo;
-    public Transform Cargo => _cargo;
 
+    public Transform Cargo => _cargo;
 
     public void Take(Transform item)
     {
